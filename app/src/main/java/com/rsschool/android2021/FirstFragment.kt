@@ -9,6 +9,8 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import java.lang.NumberFormatException
+import java.text.NumberFormat
 
 class FirstFragment : Fragment() {
 
@@ -47,15 +49,25 @@ class FirstFragment : Fragment() {
 
         generateButton?.setOnClickListener {
             // в переменндим считанное минимальное значение
-            if(minET?.text.toString().isEmpty()) {
-                Toast.makeText(view.context, "Введите минимальное значение", Toast.LENGTH_LONG).show()
-            } else if (maxET?.text.toString().isEmpty()) {
-                Toast.makeText(view.context, "Введите максимальное значение", Toast.LENGTH_LONG).show()
-            } else {
-                val min = Integer.parseInt(minET?.text.toString())
-                val max = Integer.parseInt(maxET?.text.toString())
-                action.sendValues(min, max)
+            try {
+                if(minET?.text.toString().isEmpty()) {
+                    Toast.makeText(view.context, "Введите минимальное значение", Toast.LENGTH_LONG).show()
+                } else if (maxET?.text.toString().isEmpty()) {
+                    Toast.makeText(view.context, "Введите максимальное значение", Toast.LENGTH_LONG).show()
+                } else {
+                    val min = Integer.parseInt(minET?.text.toString())
+                    val max = Integer.parseInt(maxET?.text.toString())
+                    if (min > max) {
+                        Toast.makeText(view.context, "Минимальное число должно быть меньше максимального! Введите корректные значения чисел.", Toast.LENGTH_LONG, ).show()
+                    } else {
+                        action.sendValues(min, max)
+                    }
+                }
+            } catch (e: NumberFormatException) {
+                Toast.makeText(view.context, "Минимальное или максимальное число преревышают допучтимое значение", Toast.LENGTH_LONG, ).show()
             }
+
+
         }
     }
 
