@@ -7,11 +7,14 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import kotlin.random.Random
 
 class SecondFragment : Fragment() {
 
     private var backButton: Button? = null
     private var result: TextView? = null
+    private var generateNum = 0
+    private lateinit var action: IFragmentAction
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,14 +34,16 @@ class SecondFragment : Fragment() {
 
         result?.text = generate(min, max).toString()
 
+        action = activity as IFragmentAction
+
         backButton?.setOnClickListener {
-            // TODO: implement back
+            action.sendValues(generateNum)
         }
     }
 
     private fun generate(min: Int, max: Int): Int {
-        // TODO: generate random number
-        return 0
+        generateNum = Random.nextInt(min, max)
+        return generateNum
     }
 
     companion object {
@@ -48,7 +53,9 @@ class SecondFragment : Fragment() {
             val fragment = SecondFragment()
             val args = Bundle()
 
-            // TODO: implement adding arguments
+            args.putInt(MIN_VALUE_KEY, min)
+            args.putInt(MAX_VALUE_KEY, max)
+            fragment.arguments = args
 
             return fragment
         }
